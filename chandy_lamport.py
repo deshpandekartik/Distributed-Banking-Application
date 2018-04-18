@@ -121,6 +121,11 @@ class chandy_lamport:
 
                 for item in self.BANK.all_branches:
                         amount = self.MARKER_MESSAGE_CHANNEL_STATE[snapshot_num , item.name ][1]
+
+			# Critical section, BANK.Account_Balance accessed by multiple threads
+			with BANK.critical_section_lock:
+				BANK.Account_Balance = BANK.Account_Balance + amount 
+
                         return_snapshot_msg.channel_state.append(int(amount))
 
 
